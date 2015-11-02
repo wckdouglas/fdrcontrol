@@ -1,0 +1,3 @@
+useDynLib(fdrcontrol)
+exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, evalCpp)
