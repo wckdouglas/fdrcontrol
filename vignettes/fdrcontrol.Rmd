@@ -1,0 +1,42 @@
+---
+title: "fdrcontrol"
+author: "Dougals Wu"
+date: "November 2, 2015"
+output: html_document
+---
+
+The **fdrcontrol** package tends replace *p.adjust(method='BH') or p.adjust(method='fdr')* for a faster filtering step.
+
+The *FDRcontrol* function takes in a vector of p-values and an alpha value (threshold) for controlling false discovery rate. The algorithm used was described in [here]( https://www.urmc.rochester.edu/biostat/people/faculty/TuSite/FDR_procedure.pdf).
+
+The function return 1 when the datapoint is below the threshold and 0 if it is above the threshold.
+
+```{r warning=F, message=F}
+set.seed(0)
+library(fdrcontrol)
+library(dplyr)
+
+alpha <- 0.01
+
+#simulate data
+df <- data.frame(p = sample(1000,100000,replace=T)/100000)
+hist(df$p)
+
+df %>% 
+    mutate(fdr = FDRcontrol(p,alpha))%>%  #usage of the function FDRcontrol
+    mutate(padj = p.adjust(p,method='fdr')) -> df
+df %>% 
+    filter(fdr==1,padj > alpha) #none of the data point disagree 
+
+```
+
+To compare the speed of computation:
+
+```{r}
+library(microbenchmark)
+microbenchmark(df %>% mutate(FDR = FDRcontrol(p,0.01)),
+            df %>% mutate(padj = p.adjust(p,method='fdr')))
+```
+
+
+```
