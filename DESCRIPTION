@@ -1,11 +1,11 @@
 Package: fdrcontrol
 Type: Package
-Title: False discovery rate filter with Benjamin–Hochberg procedure
+Title: False discovery rate filter with Benjamin Hochberg procedure
 Version: 1.0
 Date: 2015-11-02
 Author: Douglas Wu  
 Maintainer: Douglas Wu <wckdouglas@gmail.com>
-Description: This library contain a function for FDR control. This is on created in order to extract data points that are significant in multiple testing.
+Description: This library contain a function for FDR control.
 License: GPL (>= 2)
 Imports: Rcpp (>= 0.12.1)
 LinkingTo: Rcpp
