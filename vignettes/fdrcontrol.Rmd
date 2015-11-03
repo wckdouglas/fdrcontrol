@@ -2,7 +2,7 @@
 title: "fdrcontrol"
 author: "Dougals Wu"
 date: "November 2, 2015"
-output: html_document
+output: pdf_document
 ---
 
 The **fdrcontrol** package tends replace *p.adjust(method='BH') or p.adjust(method='fdr')* for a faster filtering step.
@@ -14,20 +14,42 @@ The function return 1 when the datapoint is below the threshold and 0 if it is a
 ```{r warning=F, message=F}
 set.seed(0)
 library(fdrcontrol)
+library(ggplot2)
 library(dplyr)
+library(tidyr)
 
 alpha <- 0.01
+no_of_test <- 100000
 
 #simulate data
-df <- data.frame(p = sample(1000,100000,replace=T)/100000)
+x <- rnorm(no_of_test, mean = c(rep(0, 25), rep(3, 25)))
+p <- 2*pnorm(sort(-abs(x)))
+df <- data_frame(p)
 hist(df$p)
 
 df %>% 
     mutate(fdr = FDRcontrol(p,alpha))%>%  #usage of the function FDRcontrol
-    mutate(padj = p.adjust(p,method='fdr')) -> df
+    mutate(padj = p.adjust(p,method='BH')) %>%
+    arrange(p) %>%
+    mutate(idx = 1:nrow(.)) %>%
+    tbl_df -> df
+
 df %>% 
     filter(fdr==1,padj > alpha) #none of the data point disagree 
 
+df %>% 
+    mutate(FDRcontrol = ifelse(fdr==1,'Passed','Failed')) %>%
+    mutate(p.adjust = ifelse(padj< alpha, 'Passed','Failed'))  %>%
+    select(-fdr,-padj) %>%
+    gather(Method,tag,-p,-idx) %>%
+    ggplot() +
+        geom_point(aes(y=p,x=idx,color=factor(tag))) +
+        geom_line(aes(y = idx/no_of_test * alpha, x=idx),color='green',size = 1.5,alpha=0.5) +
+        facet_grid(.~Method)+
+        theme(text=element_text(size=20)) +
+        theme(axis.text.x = element_blank()) +
+        ylim (0,0.1) +
+        labs(color=' ', x = 'Index', y = 'p-value') 
 ```
 
 To compare the speed of computation:
