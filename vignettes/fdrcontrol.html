@@ -117,12 +117,11 @@ microbenchmark(df %&gt;% mutate(FDR = FDRcontrol(p,0.01)),
             df %&gt;% mutate(padj = p.adjust(p,method='fdr')))</code></pre>
 <pre><code>## Unit: milliseconds
 ##                                               expr       min        lq
-##           df %&gt;% mutate(FDR = FDRcontrol(p, 0.01))  2.073185  3.181854
-##  df %&gt;% mutate(padj = p.adjust(p, method = &quot;fdr&quot;)) 17.075655 19.818838
-##       mean    median        uq      max neval cld
-##   3.838317  3.510526  3.718476 15.10034   100  a 
-##  23.756499 23.298384 25.341520 88.09432   100   b</code></pre>
-<p>```</p>
+##           df %&gt;% mutate(FDR = FDRcontrol(p, 0.01))  2.223966  3.474946
+##  df %&gt;% mutate(padj = p.adjust(p, method = &quot;fdr&quot;)) 16.625957 21.357048
+##       mean    median        uq       max neval cld
+##   4.429213  3.905469  4.695164  18.36345   100  a 
+##  26.108967 24.201589 28.668848 109.94273   100   b</code></pre>
 
 
 </div>
