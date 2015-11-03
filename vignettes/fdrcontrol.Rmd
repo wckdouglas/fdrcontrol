@@ -37,6 +37,16 @@ df %>%
 df %>% 
     filter(fdr==1,padj > alpha) #none of the data point disagree 
 
+
+```
+
+A plot of p-values vs the ranking of the p-values is plotted below. The green line plotted the threshold at y-axis along the ranking of p-values, which follows:
+\[
+y = \frac{\hat{i}}{m}\alpha
+\]
+where $\hat{i}$ is the rank of the p-values, $m$ is the no. of test that were included in the experiment and alpha is false discovery rate that we can tolerate.  
+
+```{r warning=F}
 df %>% 
     mutate(FDRcontrol = ifelse(fdr==1,'Passed','Failed')) %>%
     mutate(p.adjust = ifelse(padj< alpha, 'Passed','Failed'))  %>%

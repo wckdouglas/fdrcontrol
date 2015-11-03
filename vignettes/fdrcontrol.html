@@ -97,6 +97,9 @@ df %&gt;%
 <pre><code>## Source: local data frame [0 x 4]
 ## 
 ## Variables not shown: p (dbl), fdr (dbl), padj (dbl), idx (int)</code></pre>
+<p>A plot of p-values vs the ranking of the p-values is plotted below. The green line plotted the threshold at y-axis along the ranking of p-values, which follows: <span class="math display">\[
+y = \frac{\hat{i}}{m}\alpha
+\]</span> where <span class="math inline">\(\hat{i}\)</span> is the rank of the p-values, <span class="math inline">\(m\)</span> is the no. of test that were included in the experiment and alpha is false discovery rate that we can tolerate.</p>
 <pre class="r"><code>df %&gt;% 
     mutate(FDRcontrol = ifelse(fdr==1,'Passed','Failed')) %&gt;%
     mutate(p.adjust = ifelse(padj&lt; alpha, 'Passed','Failed'))  %&gt;%
@@ -117,11 +120,11 @@ microbenchmark(df %&gt;% mutate(FDR = FDRcontrol(p,0.01)),
             df %&gt;% mutate(padj = p.adjust(p,method='fdr')))</code></pre>
 <pre><code>## Unit: milliseconds
 ##                                               expr       min        lq
-##           df %&gt;% mutate(FDR = FDRcontrol(p, 0.01))  2.223966  3.474946
-##  df %&gt;% mutate(padj = p.adjust(p, method = &quot;fdr&quot;)) 16.625957 21.357048
-##       mean    median        uq       max neval cld
-##   4.429213  3.905469  4.695164  18.36345   100  a 
-##  26.108967 24.201589 28.668848 109.94273   100   b</code></pre>
+##           df %&gt;% mutate(FDR = FDRcontrol(p, 0.01))  2.186808  3.310369
+##  df %&gt;% mutate(padj = p.adjust(p, method = &quot;fdr&quot;)) 16.605776 20.416440
+##       mean    median        uq      max neval cld
+##   3.981678  3.636127  4.042673 13.79101   100  a 
+##  24.637293 23.822474 27.083515 91.59464   100   b</code></pre>
 
 
 </div>
